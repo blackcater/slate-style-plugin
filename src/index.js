@@ -12,7 +12,7 @@ const StylePlugin = {
       throw new Error("`mark` and `type` properties should be included in first parameter!")
     }
 
-  return {
+    return {
       schema: { marks: { [style.type]: style.mark } },
       onKeyDown(event, data, state) {
         const isCtrl = style.isCtrl || false

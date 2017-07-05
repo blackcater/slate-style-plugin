@@ -1,6 +1,6 @@
 {
   "name": "slate-style-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "It is a plugin for generating inline-style formats conveniently",
   "main": "dist/index.js",
   "scripts": {
@@ -26,14 +26,12 @@
     "babel-preset-latest": "^6.24.1",
     "eslint-config-finger": "^0.2.0",
     "rollup": "^0.43.0",
+    "rollup-plugin-babel": "^2.7.1",
     "xo": "^0.18.2"
   },
   "xo": {
     "extends": [
       "finger"
     ]
-  },
-  "dependencies": {
-    "rollup-plugin-babel": "^2.7.1"
   }
 }

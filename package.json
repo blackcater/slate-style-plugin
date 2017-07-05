@@ -1,0 +1,30 @@
+{
+  "name": "slate-style-plugin",
+  "version": "0.0.1",
+  "description": "It is a plugin for generating inline-style formats conveniently",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "xo src/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blackcater/slate-style-plugin.git"
+  },
+  "keywords": [
+    "slate",
+    "slate-plugin"
+  ],
+  "author": "blackcater",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blackcater/slate-style-plugin/issues"
+  },
+  "homepage": "https://github.com/blackcater/slate-style-plugin#readme",
+  "devDependencies": {
+    "eslint-config-finger": "^0.2.0",
+    "xo": "^0.18.2"
+  },
+  "xo": {
+    "extends": ["finger"]
+  }
+}

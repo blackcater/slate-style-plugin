@@ -57,6 +57,7 @@ const StylePlugin = {
           const isCtrl = style.isCtrl || false
           const isShift = style.isShift || false
           const isDefault = style.isDefault || false
+          const hasMark = state.marks.some(mark => mark.type === style.type)
 
           if (
             style.key === data.key &&
@@ -69,16 +70,24 @@ const StylePlugin = {
             let transform = state.transform()
 
             for (let j = 0; j < len; j++) {
-              transform = transform.removeMark(types[j])
-            }
-
-            if (isDefault) {
-              return transform
-                .apply()
+              if (
+                i === j &&
+                hasMark &&
+                !isDefault
+              ) {
+                transform = transform.toggleMark(types[j])
+              } else if (
+                i === j &&
+                !hasMark &&
+                !isDefault
+              ) {
+                transform = transform.addMark(types[j])
+              } else {
+                transform = transform.removeMark(types[j])
+              }
             }
 
             return transform
-              .addMark(style.type)
               .apply()
           }
         }
@@ -121,22 +130,29 @@ const toggleStyle = {
       return (e) => {
         e.preventDefault()
 
+        const hasMark = state.marks.some(mark => mark.type === type)
         let transform = state.transform()
 
         for (let i = 0, len = types.length; i < len; i++) {
-          transform = transform.removeMark(types[i])
+          if (
+            type === types[i] &&
+            hasMark &&
+            !isDefault
+          ) {
+            transform = transform.toggleMark(types[j])
+          } else if (
+            type === types[i] &&
+            !hasMark &&
+            !isDefault
+          ) {
+            transform = transform.addMark(types[j])
+          } else {
+            transform = transform.removeMark(types[j])
+          }
         }
 
-        let res = null
-
-        if (isDefault) {
-          res = transform
-            .apply()
-        } else {
-          res = transform
-            .addMark(type)
-            .apply()
-        }
+        const res = transform
+          .apply()
 
         return onChange ? onChange(res) : res
       }

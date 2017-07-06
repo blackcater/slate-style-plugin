@@ -4,6 +4,8 @@
 	(factory((global.SlateStylePlugin = global.SlateStylePlugin || {})));
 }(this, (function (exports) { 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 /**
@@ -52,27 +54,40 @@ var StylePlugin = {
     return {
       schema: schema,
       onKeyDown: function onKeyDown(event, data, state) {
-        for (var _i = 0, _len = styles.length; _i < _len; _i++) {
-          var _style = styles[_i];
-          var isCtrl = _style.isCtrl || false;
-          var isShift = _style.isShift || false;
-          var isDefault = _style.isDefault || false;
+        var _loop = function _loop(_i, _len) {
+          var style = styles[_i];
+          var isCtrl = style.isCtrl || false;
+          var isShift = style.isShift || false;
+          var isDefault = style.isDefault || false;
+          var hasMark = state.marks.some(function (mark) {
+            return mark.type === style.type;
+          });
 
-          if (_style.key === data.key && data.isCmd && data.isCtrl === isCtrl && data.isShift === isShift) {
+          if (style.key === data.key && data.isCmd && data.isCtrl === isCtrl && data.isShift === isShift) {
             event.preventDefault();
 
             var transform = state.transform();
 
-            for (var j = 0; j < _len; j++) {
-              transform = transform.removeMark(types[j]);
+            for (var _j = 0; _j < _len; _j++) {
+              if (_i === _j && hasMark && !isDefault) {
+                transform = transform.toggleMark(types[_j]);
+              } else if (_i === _j && !hasMark && !isDefault) {
+                transform = transform.addMark(types[_j]);
+              } else {
+                transform = transform.removeMark(types[_j]);
+              }
             }
 
-            if (isDefault) {
-              return transform.apply();
-            }
-
-            return transform.addMark(_style.type).apply();
+            return {
+              v: transform.apply()
+            };
           }
+        };
+
+        for (var _i = 0, _len = styles.length; _i < _len; _i++) {
+          var _ret = _loop(_i, _len);
+
+          if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
         }
       }
     };
@@ -111,19 +126,22 @@ var StylePlugin = {
       return function (e) {
         e.preventDefault();
 
+        var hasMark = state.marks.some(function (mark) {
+          return mark.type === type;
+        });
         var transform = state.transform();
 
         for (var i = 0, len = types.length; i < len; i++) {
-          transform = transform.removeMark(types[i]);
+          if (type === types[i] && hasMark && !isDefault) {
+            transform = transform.toggleMark(types[j]);
+          } else if (type === types[i] && !hasMark && !isDefault) {
+            transform = transform.addMark(types[j]);
+          } else {
+            transform = transform.removeMark(types[j]);
+          }
         }
 
-        var res = null;
-
-        if (isDefault) {
-          res = transform.apply();
-        } else {
-          res = transform.addMark(type).apply();
-        }
+        var res = transform.apply();
 
         return onChange ? onChange(res) : res;
       };

@@ -1,6 +1,6 @@
 {
   "name": "slate-style-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "It is a plugin for generating inline-style formats conveniently",
   "main": "dist/index.js",
   "scripts": {

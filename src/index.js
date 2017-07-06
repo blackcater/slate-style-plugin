@@ -16,11 +16,13 @@ const StylePlugin = {
       schema: { marks: { [style.type]: style.mark } },
       onKeyDown(event, data, state) {
         const isCtrl = style.isCtrl || false
+        const isShift = style.isShift || false
 
         if (
           style.key === data.key &&
           data.isCmd &&
-          data.isCtrl === isCtrl
+          data.isCtrl === isCtrl &&
+          data.isShift === isShift
         ) {
           event.preventDefault()
 
@@ -53,11 +55,14 @@ const StylePlugin = {
         for (let i = 0, len = styles.length; i < len; i++) {
           const style = styles[i]
           const isCtrl = style.isCtrl || false
+          const isShift = style.isShift || false
+          const isDefault = style.isDefault || false
 
           if (
             style.key === data.key &&
             data.isCmd &&
-            data.isCtrl === isCtrl
+            data.isCtrl === isCtrl &&
+            data.isShift === isShift
           ) {
             event.preventDefault()
 
@@ -65,6 +70,11 @@ const StylePlugin = {
 
             for (let j = 0; j < len; j++) {
               transform = transform.removeMark(types[j])
+            }
+
+            if (isDefault) {
+              return transform
+                .apply()
             }
 
             return transform
@@ -103,7 +113,7 @@ const toggleStyle = {
       throw new Error("`state` parameter can\'t be Void!")
     }
 
-    return (type) => {
+    return (type, isDefault = false) => {
       if (!type) {
         throw new Error("`type` parameter can\'t be Void!")
       }
@@ -117,9 +127,16 @@ const toggleStyle = {
           transform = transform.removeMark(types[i])
         }
 
-        const res = transform
-          .addMark(type)
-          .apply()
+        let res = null
+
+        if (isDefault) {
+          res = transform
+            .apply()
+        } else {
+          res = transform
+            .addMark(type)
+            .apply()
+        }
 
         return onChange ? onChange(res) : res
       }

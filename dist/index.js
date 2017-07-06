@@ -24,8 +24,9 @@ var StylePlugin = {
       schema: { marks: _defineProperty({}, style.type, style.mark) },
       onKeyDown: function onKeyDown(event, data, state) {
         var isCtrl = style.isCtrl || false;
+        var isShift = style.isShift || false;
 
-        if (style.key === data.key && data.isCmd && data.isCtrl === isCtrl) {
+        if (style.key === data.key && data.isCmd && data.isCtrl === isCtrl && data.isShift === isShift) {
           event.preventDefault();
 
           return state.transform().toggleMark(style.type).apply();
@@ -54,14 +55,20 @@ var StylePlugin = {
         for (var _i = 0, _len = styles.length; _i < _len; _i++) {
           var _style = styles[_i];
           var isCtrl = _style.isCtrl || false;
+          var isShift = _style.isShift || false;
+          var isDefault = _style.isDefault || false;
 
-          if (_style.key === data.key && data.isCmd && data.isCtrl === isCtrl) {
+          if (_style.key === data.key && data.isCmd && data.isCtrl === isCtrl && data.isShift === isShift) {
             event.preventDefault();
 
             var transform = state.transform();
 
             for (var j = 0; j < _len; j++) {
               transform = transform.removeMark(types[j]);
+            }
+
+            if (isDefault) {
+              return transform.apply();
             }
 
             return transform.addMark(_style.type).apply();
@@ -95,6 +102,8 @@ var StylePlugin = {
     }
 
     return function (type) {
+      var isDefault = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
       if (!type) {
         throw new Error("`type` parameter can\'t be Void!");
       }
@@ -108,7 +117,13 @@ var StylePlugin = {
           transform = transform.removeMark(types[i]);
         }
 
-        var res = transform.addMark(type).apply();
+        var res = null;
+
+        if (isDefault) {
+          res = transform.apply();
+        } else {
+          res = transform.addMark(type).apply();
+        }
 
         return onChange ? onChange(res) : res;
       };

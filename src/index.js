@@ -57,7 +57,7 @@ const StylePlugin = {
           const isCtrl = style.isCtrl || false
           const isShift = style.isShift || false
           const isDefault = style.isDefault || false
-          const hasMark = state.marks.some(mark => mark.type === style.type)
+          const hasMark = state.marks.some((mark) => mark.type === style.type)
 
           if (
             style.key === data.key &&
@@ -130,7 +130,7 @@ const toggleStyle = {
       return (e) => {
         e.preventDefault()
 
-        const hasMark = state.marks.some(mark => mark.type === type)
+        const hasMark = state.marks.some(((mark) => mark.type === type))
         let transform = state.transform()
 
         for (let i = 0, len = types.length; i < len; i++) {
@@ -139,15 +139,15 @@ const toggleStyle = {
             hasMark &&
             !isDefault
           ) {
-            transform = transform.toggleMark(types[j])
+            transform = transform.toggleMark(types[i])
           } else if (
             type === types[i] &&
             !hasMark &&
             !isDefault
           ) {
-            transform = transform.addMark(types[j])
+            transform = transform.addMark(types[i])
           } else {
-            transform = transform.removeMark(types[j])
+            transform = transform.removeMark(types[i])
           }
         }
 

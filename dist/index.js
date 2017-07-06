@@ -68,13 +68,13 @@ var StylePlugin = {
 
             var transform = state.transform();
 
-            for (var _j = 0; _j < _len; _j++) {
-              if (_i === _j && hasMark && !isDefault) {
-                transform = transform.toggleMark(types[_j]);
-              } else if (_i === _j && !hasMark && !isDefault) {
-                transform = transform.addMark(types[_j]);
+            for (var j = 0; j < _len; j++) {
+              if (_i === j && hasMark && !isDefault) {
+                transform = transform.toggleMark(types[j]);
+              } else if (_i === j && !hasMark && !isDefault) {
+                transform = transform.addMark(types[j]);
               } else {
-                transform = transform.removeMark(types[_j]);
+                transform = transform.removeMark(types[j]);
               }
             }
 
@@ -133,11 +133,11 @@ var StylePlugin = {
 
         for (var i = 0, len = types.length; i < len; i++) {
           if (type === types[i] && hasMark && !isDefault) {
-            transform = transform.toggleMark(types[j]);
+            transform = transform.toggleMark(types[i]);
           } else if (type === types[i] && !hasMark && !isDefault) {
-            transform = transform.addMark(types[j]);
+            transform = transform.addMark(types[i]);
           } else {
-            transform = transform.removeMark(types[j]);
+            transform = transform.removeMark(types[i]);
           }
         }
 
